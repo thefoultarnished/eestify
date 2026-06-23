@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Eestify",
   "version": "1.0",
-  "description": "Learn Estonian naturally! Difficulty levels, categories, flashcard quiz, spaced repetition, audio, grammar hints, verb conjugations, achievements, and more.",
+  "description": "Learn Estonian naturally with difficulty levels, categories, quizzes, audio, grammar hints, achievements, and more.",
   "permissions": [
     "storage",
     "activeTab",
