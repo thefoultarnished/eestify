@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --text-primary: #FFFFFF; --text-secondary: rgba(255,255,255,0.85); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 400px; min-height: 540px; font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #0072CE 0%, #004B87 15%, #003366 28%, #1a1a1a 33%, #2d2d2d 50%, #404040 62%, #707070 66%, #A0A0A0 80%, #C8C8C8 90%, #D8D8D8 100%);
+      color: var(--text-primary);
+    }
+    .container { padding: 16px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    h1 { font-size: 20px; font-weight: 700; }
+    .subtitle { font-size: 11px; color: var(--text-secondary); }
+    .card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px; margin-bottom: 10px; backdrop-filter: blur(20px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    label { display: block; margin-bottom: 8px; font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
+    .value { font-size: 28px; font-weight: 700; text-align: center; margin: 6px 0 12px; }
+    input[type="range"] { width: 100%; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.2); appearance: none; -webkit-appearance: none; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 2px solid #0072CE; cursor: pointer; }
+    .toggle { display: flex; align-items: center; justify-content: space-between; }
+    .toggle-label { font-size: 12px; font-weight: 600; }
+    button.toggle-btn { width: 48px; height: 26px; border-radius: 13px; border: none; cursor: pointer; position: relative; transition: all 0.3s; }
+    button.toggle-btn.on { background: linear-gradient(135deg, #0072CE, #5DADE2); }
+    button.toggle-btn.off { background: rgba(26,26,26,0.5); }
+    button.toggle-btn::after { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #fff; top: 3px; transition: left 0.28s; }
+    button.toggle-btn.on::after { left: 25px; }
+    button.toggle-btn.off::after { left: 3px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
+    .tab { flex: 1; min-width: 60px; padding: 8px 4px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: var(--text-secondary); font-size: 10px; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
+    .tab.active { background: rgba(0,114,206,0.4); border-color: #0072CE; color: #fff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .stat-box { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; text-align: center; }
+    .stat-num { font-size: 22px; font-weight: 700; color: #5DADE2; }
+    .stat-label { font-size: 9px; color: var(--text-secondary); text-transform: uppercase; margin-top: 2px; }
+    .wotd { background: linear-gradient(135deg, rgba(0,114,206,0.3), rgba(93,173,226,0.2)); border-radius: 10px; padding: 14px; text-align: center; margin-bottom: 10px; }
+    .wotd-et { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .wotd-en { font-size: 14px; color: var(--text-secondary); }
+    .wotd-phonetic { font-size: 11px; color: #5DADE2; font-style: italic; margin-top: 4px; }
+    .wotd-example { font-size: 11px; color: var(--text-secondary); margin-top: 8px; font-style: italic; }
+    .btn-audio { background: none; border: none; cursor: pointer; font-size: 18px; vertical-align: middle; margin-left: 6px; }
+    select, input[type="password"], input[type="text"] { width: 100%; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(0,0,0,0.4); color: #fff; font-size: 12px; margin-bottom: 8px; }
+    select option { background: #1a1a1a; color: #fff; }
+    .btn { width: 100%; padding: 10px; background: linear-gradient(135deg, #f0f0f0, #d0d0d0); color: #1a1a1a; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; margin-top: 6px; transition: transform 0.1s; }
+    .btn:active { transform: scale(0.98); }
+    .btn-secondary { background: rgba(0,114,206,0.4); color: #fff; }
+    .btn-danger { background: rgba(239,68,68,0.4); color: #fff; }
+    .chip-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .chip { padding: 6px 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; font-size: 10px; cursor: pointer; transition: all 0.2s; }
+    .chip.active { background: rgba(0,114,206,0.5); border-color: #0072CE; }
+    .quiz-card { text-align: center; padding: 20px; }
+    .quiz-word { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
+    .quiz-hint { font-size: 11px; color: #5DADE2; margin-bottom: 12px; }
+    .quiz-options { display: grid; gap: 8px; }
+    .quiz-opt { padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .quiz-opt:hover { background: rgba(0,114,206,0.3); }
+    .quiz-opt.correct { background: #10b981; border-color: #10b981; }
+    .quiz-opt.wrong { background: #ef4444; border-color: #ef4444; }
+    .quiz-result { margin-top: 12px; font-size: 14px; font-weight: 600; }
+    .fav-list { max-height: 150px; overflow-y: auto; }
+    .fav-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; margin-bottom: 6px; font-size: 12px; }
+    .fav-remove { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px; }
+    .preset-btn { padding: 10px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; margin-bottom: 10px; }
+    #status { margin-top: 8px; font-size: 10px; text-align: center; padding: 6px; border-radius: 6px; background: rgba(0,114,206,0.3); display: none; }
+    #status.show { display: block; }
+    .info-tip { font-size: 10px; color: var(--text-secondary); text-align: center; margin-top: 8px; background: rgba(0,0,0,0.6); padding: 6px; border-radius: 6px; backdrop-filter: blur(4px); }
+    .achievement { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; }
+    .achievement.locked { opacity: 0.5; }
+    .achievement-icon { font-size: 24px; }
+    .achievement-info { flex: 1; }
+    .achievement-title { font-size: 12px; font-weight: 600; }
+    .achievement-desc { font-size: 10px; color: var(--text-secondary); }
+    .blacklist-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: rgba(0,0,0,0.2); border-radius: 6px; margin-bottom: 4px; font-size: 11px; }
+    .shortcuts { font-size: 11px; color: var(--text-secondary); }
+    .shortcuts kbd { background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+    textarea { width: 100%; height: 80px; padding: 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; background: rgba(0,0,0,0.25); color: #fff; font-size: 11px; font-family: monospace; resize: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div><h1>Eestify</h1><div class="subtitle">Learn Estonian</div></div>
+      <button id="toggle" class="toggle-btn on"></button>
+    </div>
+    
+    <div class="tabs">
+      <div class="tab active" data-tab="learn">Learn</div>
+      <div class="tab" data-tab="quiz">Quiz</div>
+      <div class="tab" data-tab="stats">Stats</div>
+      <div class="tab" data-tab="achievements">🏆</div>
+      <div class="tab" data-tab="settings">⚙️</div>
+    </div>
+
+    <!-- LEARN TAB -->
+    <div class="tab-content active" id="tab-learn">
+      <div class="wotd">
+        <div class="wotd-et" id="wotdEt">tere</div>
+        <div class="wotd-phonetic" id="wotdPhonetic">[ˈtere]</div>
+        <div class="wotd-en" id="wotdEn">hello</div>
+        <div class="wotd-example" id="wotdExample">"Tere, kuidas läheb?" - Hello, how are you?</div>
+        <button class="btn-audio" id="wotdAudio">🔊</button>
+      </div>
+      
+      <button class="preset-btn" id="beginnerMode">🌱 Beginner Mode</button>
+      
+      <div class="card">
+        <label>Translation Density</label>
+        <div class="value"><span id="percentValue">20</span>%</div>
+        <input type="range" id="percentage" min="5" max="100" value="20" step="5">
+      </div>
+      
+      <div class="card">
+        <label>Difficulty Level</label>
+        <select id="difficulty">
+          <option value="0">All Levels</option>
+          <option value="1">Beginner (Level 1)</option>
+          <option value="2">Easy (Level 1-2)</option>
+          <option value="3">Intermediate (Level 1-3)</option>
+        </select>
+      </div>
+      
+      <div class="card">
+        <label>Categories</label>
+        <div class="chip-grid" id="categories">
+          <div class="chip active" data-cat="all">All</div>
+          <div class="chip" data-cat="greetings">Greetings</div>
+          <div class="chip" data-cat="family">Family</div>
+          <div class="chip" data-cat="food">Food</div>
+          <div class="chip" data-cat="numbers">Numbers</div>
+          <div class="chip" data-cat="colors">Colors</div>
+          <div class="chip" data-cat="verbs">Verbs</div>
+          <div class="chip" data-cat="nature">Nature</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <label>Add Custom Word</label>
+        <div style="display:flex;gap:6px;margin-bottom:6px;">
+          <input type="text" id="customEn" placeholder="English" style="flex:1;margin:0;">
+          <input type="text" id="customEt" placeholder="Estonian" style="flex:1;margin:0;">
+        </div>
+        <button class="btn btn-secondary" id="addCustomWord">+ Add to Dictionary</button>
+        <div id="customWordsList" style="margin-top:8px;max-height:100px;overflow-y:auto;"></div>
+      </div>
+      <p class="info-tip">💡 Reload page after changes | Right-click word for audio</p>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div class="tab-content" id="tab-quiz">
+      <div class="quiz-card card" id="quizArea">
+        <div class="quiz-word" id="quizWord">-</div>
+        <div class="quiz-hint" id="quizHint"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-result" id="quizResult"></div>
+      </div>
+      <button class="btn" id="nextQuiz">Next Word</button>
+      <div class="stat-grid" style="margin-top: 12px;">
+        <div class="stat-box"><div class="stat-num" id="quizCorrect">0</div><div class="stat-label">Correct</div></div>
+        <div class="stat-box"><div class="stat-num" id="quizTotal">0</div><div class="stat-label">Total</div></div>
+      </div>
+    </div>
+
+    <!-- STATS TAB -->
+    <div class="tab-content" id="tab-stats">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num" id="statSeen">0</div><div class="stat-label">Words Seen</div></div>
+        <div class="stat-box"><div class="stat-num" id="statMastered">0</div><div class="stat-label">Mastered</div></div>
+        <div class="stat-box"><div class="stat-num" id="statStreak">0</div><div class="stat-label">Day Streak</div></div>
+        <div class="stat-box"><div class="stat-num" id="statQuizzes">0</div><div class="stat-label">Quizzes</div></div>
+      </div>
+      <div class="card">
+        <label>Favorite Words</label>
+        <div class="fav-list" id="favList"><p style="text-align:center;color:var(--text-secondary);font-size:11px;">No favorites yet</p></div>
+      </div>
+      <div class="card">
+        <label>Export/Import Progress</label>
+        <button class="btn btn-secondary" id="exportData">📤 Export Data</button>
+        <button class="btn btn-secondary" id="importData" style="margin-top:4px;">📥 Import Data</button>
+        <input type="file" id="importFile" style="display:none;" accept=".json">
+      </div>
+      <button class="btn btn-danger" id="resetStats">Reset All Progress</button>
+    </div>
+
+    <!-- ACHIEVEMENTS TAB -->
+    <div class="tab-content" id="tab-achievements">
+      <div id="achievementsList"></div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="tab-content" id="tab-settings">
+      <div class="card">
+        <label>Features</label>
+        <div class="toggle" style="margin-bottom:10px;">
+          <span class="toggle-label">🔊 Audio Pronunciation</span>
+          <button id="toggleAudio" class="toggle-btn on"></button>
+        </div>
+        <div class="toggle" style="margin-bottom:10px;">
+          <span class="toggle-label">👆 Click to Toggle Word</span>
+          <button id="toggleClickReveal" class="toggle-btn on"></button>
+        </div>
+        <div class="toggle" style="margin-bottom:10px;">
+          <span class="toggle-label">📝 Show Grammar Hints</span>
+          <button id="toggleGrammar" class="toggle-btn on"></button>
+        </div>
+        <div class="toggle">
+          <span class="toggle-label">🌙 Match Site Dark Mode</span>
+          <button id="toggleDarkMode" class="toggle-btn on"></button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <label>Site Blacklist</label>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input type="text" id="blacklistInput" placeholder="example.com" style="flex:1;margin:0;">
+          <button class="btn" id="addBlacklist" style="width:auto;margin:0;padding:8px 12px;">Add</button>
+        </div>
+        <div id="blacklistItems"></div>
+      </div>
+      
+      <div class="card">
+        <label>Keyboard Shortcuts</label>
+        <div class="shortcuts">
+          <p><kbd>Alt+E</kbd> Toggle extension on/off</p>
+          <p style="margin-top:4px;"><kbd>Alt+Q</kbd> Open popup</p>
+          <p style="margin-top:6px;font-size:10px;">Customize in chrome://extensions/shortcuts</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
